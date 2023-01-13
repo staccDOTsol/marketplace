@@ -15,6 +15,7 @@ import AdminMenu, { AdminMenuItemType } from '../../../components/AdminMenu'
 import { ReactElement, useMemo } from 'react'
 import { Wallet } from '@metaplex/js'
 import { initMarketplaceSDK, Marketplace } from '@holaplex/marketplace-js-sdk'
+import { Connection } from '@solana/web3.js'
 
 const SUBDOMAIN = process.env.MARKETPLACE_SUBDOMAIN
 
@@ -97,7 +98,7 @@ interface MarketplaceForm {
 const AdminEditMarketplace = ({ marketplace }: AdminEditMarketplaceProps) => {
   const wallet = useWallet()
   const { publicKey, signTransaction } = wallet
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const login = useLogin()
   const auctionHouses = marketplace.auctionHouses?.map(({ address }) => ({
     address: address,

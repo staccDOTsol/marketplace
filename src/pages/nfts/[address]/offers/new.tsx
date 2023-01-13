@@ -37,6 +37,7 @@ import { isSol } from 'src/modules/sol'
 import cx from 'classnames'
 import Select from 'react-select'
 import { useTokenList } from './../../../../hooks/tokenList'
+import { Connection } from '@solana/web3.js'
 
 const SUBDOMAIN = process.env.MARKETPLACE_SUBDOMAIN
 
@@ -238,7 +239,7 @@ interface OfferProps {
 const OfferNew = ({ nft, marketplace, nftQuery }: OfferProps) => {
   const wallet = useWallet()
   const { publicKey, signTransaction } = wallet
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const router = useRouter()
   const login = useLogin()
   const sdk = useMemo(

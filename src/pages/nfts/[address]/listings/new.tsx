@@ -29,7 +29,7 @@ import {
   GetNftData,
   AuctionHouse,
   MarketplaceClient,
-} from '@holaplex/marketplace-js-sdk'
+} from '../../../../../mjsdk/src'
 import { Wallet } from '@metaplex/js'
 import { Modal } from './../../../../layouts/Modal'
 import Select from 'react-select'
@@ -43,6 +43,7 @@ import {
   MultiTransactionContext,
 } from '../../../../modules/multi-transaction'
 import BN from 'bn.js'
+import { Connection } from '@solana/web3.js'
 
 const SUBDOMAIN = process.env.MARKETPLACE_SUBDOMAIN
 
@@ -245,7 +246,7 @@ interface SellNftProps {
 const ListingNew = ({ nft, marketplace, nftQuery }: SellNftProps) => {
   const wallet = useWallet()
   const { publicKey, signTransaction } = wallet
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const router = useRouter()
   const sdk = useMemo(
     () => initMarketplaceSDK(connection, wallet as Wallet),
@@ -295,17 +296,21 @@ const ListingNew = ({ nft, marketplace, nftQuery }: SellNftProps) => {
 
   const onAcceptOffer = async () => {
     if (highestOffer) {
-      toast('Sending the transaction to Solana.')
-      await sdk
-        .transaction()
-        .add(
-          sdk.offers(auctionHouse).accept({
-            offer: highestOffer!,
-            nft,
-          })
-        )
-        .send()
+    
+      if (nft && highestOffer){
+        toast('Sending the transaction to Solana.')
+        await sdk
+          .transaction()
+          .add(
+            sdk.offers(highestOffer?.auctionHouse as AuctionHouse).accept({
+              nft,
+              highestOffer,
+            })
+          )
+          .send()
+      }
     }
+  
   }
 
   const acceptOffer = async () => {

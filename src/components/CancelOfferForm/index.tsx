@@ -9,8 +9,9 @@ import {
   Marketplace,
   Nft,
   Offer,
-} from '@holaplex/marketplace-js-sdk'
+} from '../../../mjsdk/src'
 import { useMemo } from 'react'
+import { Connection } from '@solana/web3.js'
 
 interface CancelOfferFormProps {
   offer: Offer
@@ -29,7 +30,7 @@ const CancelOfferForm = ({
 }: CancelOfferFormProps) => {
   const wallet = useWallet()
   const { publicKey, signTransaction } = wallet
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const {
     formState: { isSubmitting },
     handleSubmit,

@@ -9,12 +9,14 @@ import {
   AhListing,
   Nft,
   Offer,
-} from '@holaplex/marketplace-js-sdk'
+} from '../../../mjsdk/src'
 import { useContext, useMemo } from 'react'
 import {
   Action,
   MultiTransactionContext,
 } from '../../modules/multi-transaction'
+import { Connection } from '@solana/web3.js'
+import { AuctionHouse } from '@holaplex/marketplace-js-sdk'
 
 interface AcceptOfferFormProps {
   offer: Offer
@@ -33,7 +35,7 @@ const AcceptOfferForm = ({
 }: AcceptOfferFormProps) => {
   const wallet = useWallet()
   const { publicKey, signTransaction } = wallet
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const sdk = useMemo(
     () => initMarketplaceSDK(connection, wallet as Wallet),
     [connection, wallet]
@@ -50,16 +52,18 @@ const AcceptOfferForm = ({
       return
     }
 
-    toast('Sending the transaction to Solana.')
-    await sdk
-      .transaction()
-      .add(
-        sdk.offers(offer.auctionHouse).accept({
-          nft,
-          offer,
-        })
-      )
-      .send()
+    if (nft && offer){
+      toast('Sending the transaction to Solana.')
+      await sdk
+        .transaction()
+        .add(
+          sdk.offers(offer?.auctionHouse as AuctionHouse).accept({
+            nft,
+            offer,
+          })
+        )
+        .send()
+    }
   }
 
   const onCancelListing = (listing: AhListing) => async () => {

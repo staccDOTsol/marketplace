@@ -14,6 +14,7 @@ import { AuctionHouse } from '@holaplex/marketplace-js-sdk/dist/types'
 import { useTokenList } from 'src/hooks/tokenList'
 import Price from 'src/components/Price'
 import { EmptyTreasuryWalletForm } from './../../../components/EmptyTreasuryWalletForm'
+import { Connection } from '@solana/web3.js'
 
 const SUBDOMAIN = process.env.MARKETPLACE_SUBDOMAIN
 
@@ -83,7 +84,7 @@ interface AdminEditFinancialsProps extends AppProps {
 }
 
 const AdminEditFinancials = ({ marketplace }: AdminEditFinancialsProps) => {
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const wallet = useWallet()
   const [loadingBalances, setLoadinBalances] = useState(true)
   const [tokenMap, loadingTokens] = useTokenList()

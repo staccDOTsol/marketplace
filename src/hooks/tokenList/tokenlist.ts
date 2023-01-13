@@ -11,8 +11,23 @@ export const useTokenList = (): [TokenMap, boolean] => {
     setLoading(true)
 
     new TokenListProvider().resolve().then((tokens) => {
-      const tokenList = tokens.filterByChainId(ENV.MainnetBeta).getList()
-
+      const tokenList = [...tokens.filterByChainId(ENV.MainnetBeta).getList(), ...[
+        {
+          address: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263',
+          symbol: 'BONK',
+          decimals: 5,
+        },
+        {
+          address: 'FfpyoV365c7iR8QQg5NHGCXQfahbqzY67B3wpzXkiLXr',
+          symbol: 'BOO',
+          decimals: 6,
+        },
+        { 
+          address: "5yxNbU8DgYJZNi3mPD9rs4XLh9ckXrhPjJ5VCujUWg5H",
+          symbol: "FRONK",
+          decimals: 5
+        }
+      ]]
       setTokenMap(
         tokenList.reduce((map, item) => {
           map.set(item.address, item)

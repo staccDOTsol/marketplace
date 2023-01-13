@@ -48,7 +48,7 @@ type AppPropsWithLayout = AppProps & {
 }
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
-  const endpoint = useMemo(() => clusterApiUrl(network), [])
+  const endpoint = "https://rpc.helius.xyz/?api-key=6b1ccd35-ba2d-472a-8f54-9ac2c3c40b8b"
 
   const wallets = useMemo(
     () => [

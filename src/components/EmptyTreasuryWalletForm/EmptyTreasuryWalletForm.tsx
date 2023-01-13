@@ -19,7 +19,7 @@ export const EmptyTreasuryWalletForm = ({
 }: EmptyTreasuryWalletFormProps) => {
   const wallet = useWallet()
   const { publicKey, signTransaction } = wallet
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const sdk = useMemo(
     () => initMarketplaceSDK(connection, wallet as Wallet),
     [connection, wallet]

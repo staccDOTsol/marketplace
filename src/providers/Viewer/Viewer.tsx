@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { viewerVar } from '../../cache'
+import { Connection } from '@solana/web3.js'
 
 export const ViewerProvider: React.FC = ({ children }) => {
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const { publicKey } = useWallet()
 
   useEffect(() => {

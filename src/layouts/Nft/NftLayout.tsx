@@ -219,7 +219,7 @@ export const NftLayout = ({
                       rel="noreferrer"
                       target="_blank"
                       className="flex gap-1 items-center transition-transform hover:scale-[1.2]"
-                    >
+                    > {data && 
                       <img
                         className="object-cover w-6 h-6 border-2 border-gray-900 rounded-full user-avatar"
                         src={
@@ -234,8 +234,10 @@ export const NftLayout = ({
                             data?.nft.owner.profile?.profileImageUrlLowres
                           ) as string
                         }
-                      />
-                      {data.nft.owner?.twitterHandle
+                      />}
+                      {
+                      data && 
+                      data.nft.owner?.twitterHandle
                         ? `@${data.nft.owner.twitterHandle}`
                         : truncateAddress(data?.nft.owner.address || '')}
                     </a>
@@ -257,11 +259,13 @@ export const NftLayout = ({
                   {listing && (
                     <div className="flex-1 mb-6">
                       <div className="label">PRICE</div>
+                      {listing.auctionHouse && 
                       <Price
                         price={listing.price.toNumber()}
                         token={tokenMap.get(listing.auctionHouse.treasuryMint)}
                         style={'text-base md:text-xl lg:text-3xl font-bold'}
-                      />
+                 
+                      />     }
                     </div>
                   )}
                 </div>
@@ -342,7 +346,7 @@ export const NftLayout = ({
                   ) : (
                     offers.map((o: Offer) => (
                       <article
-                        key={o.address}
+                        key={o.id}
                         className={cx(
                           'grid p-4 mb-4 border border-gray-700 rounded',
                           ifElse(
@@ -361,10 +365,11 @@ export const NftLayout = ({
                           </a>
                         </div>
                         <div>
+                          { o.auctionHouse && 
                           <Price
                             price={o.price.toNumber()}
                             token={tokenMap.get(o.auctionHouse.treasuryMint)}
-                          />
+                          /> }
                         </div>
                         <div>{format(o.createdAt, 'en_US')}</div>
                         {(offer || isOwner) && (
@@ -446,10 +451,7 @@ export const NftLayout = ({
                         >
                           <div className="flex flex-col justify-center flex-start gap-1">
                             <div className="flex">
-                              <Icon
-                                className="mr-2 self-center text-gray-300"
-                                size="16"
-                              />
+                              
                               <div className="text-xs -ml-1">
                                 {activityType}
                               </div>
@@ -523,10 +525,11 @@ export const NftLayout = ({
                             </div>
                           </div>
                           <div className="self-center">
+                            { a.auctionHouse && 
                             <Price
                               price={a.price.toNumber()}
                               token={tokenMap.get(a.auctionHouse.treasuryMint)}
-                            />
+                            />}
                           </div>
                           <div className="self-center text-sm">
                             {format(a.createdAt, 'en_US')}

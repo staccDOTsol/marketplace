@@ -11,7 +11,7 @@ import { NftLayout } from './../../layouts/Nft'
 import client from '../../client'
 import Button, { ButtonType } from '../../components/Button'
 import { useLogin } from '../../hooks/login'
-import { Marketplace, Offer } from '@holaplex/marketplace-js-sdk'
+import { AuctionHouse, Marketplace, Offer } from '@holaplex/marketplace-js-sdk'
 import { ReactElement, useContext, useMemo } from 'react'
 import { Wallet } from '@metaplex/js'
 import {
@@ -19,11 +19,12 @@ import {
   AhListing,
   initMarketplaceSDK,
   GetNftData,
-} from '@holaplex/marketplace-js-sdk'
+} from '../../../mjsdk/src'
 import {
   Action,
   MultiTransactionContext,
 } from '../../modules/multi-transaction'
+import { Connection } from '@solana/web3.js'
 
 const SUBDOMAIN = process.env.MARKETPLACE_SUBDOMAIN
 
@@ -240,7 +241,7 @@ const NftShow: NextPage<NftPageProps> = ({
   const buyNowForm = useForm()
   const wallet = useWallet()
   const { publicKey, signTransaction } = wallet
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_ENDPOINT as string)
   const login = useLogin()
   const sdk = useMemo(
     () => initMarketplaceSDK(connection, wallet as Wallet),
@@ -341,7 +342,7 @@ const NftShow: NextPage<NftPageProps> = ({
       await sdk
         .transaction()
         .add(
-          sdk.listings(listing?.auctionHouse).cancel({
+          sdk.listings(listing?.auctionHouse as AuctionHouse).cancel({
             listing,
             nft,
           })
